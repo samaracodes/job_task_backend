@@ -3,11 +3,19 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all
+    if params[:user_id] 
+      @posts = User.find_by_id(params[:user_id]).posts
+      render json: @posts.to_json
+    else 
+      @posts = Post.all
+    end
   end
 
   # GET /posts/1 or /posts/1.json
   def show
+    @post = Post.find_by_id(params[:id])
+    render json: @posts.to_json
+
   end
 
   # GET /posts/new
