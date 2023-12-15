@@ -1,13 +1,17 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  # before_action :set_user, only: %i[ show edit update destroy ]
 
   # GET /users or /users.json
   def index
     @users = User.all
+    render json: @users.to_json
   end
 
   # GET /users/1 or /users/1.json
   def show
+    @user = User.find_by_id(params[:id])
+    render json: @user.to_json
+    @post = @user.posts.last
   end
 
   # GET /users/new
@@ -60,11 +64,11 @@ class Api::V1::UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      @user = User.find_by_id(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:name, :username, :password_digest)
+      params.require(:user).permit(:name, :username, :user_access, :password)
     end
 end
